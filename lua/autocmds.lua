@@ -63,6 +63,20 @@ autocmd("Filetype", {
     end,
 })
 
+-- Copy path from mini.files
+autocmd("User", {
+    pattern = "MiniFilesBufferCreate",
+    callback = function(args)
+        vim.keymap.set("n", "yy", function()
+            local entry = require("mini.files").get_fs_entry()
+            if entry then
+                vim.fn.setreg("+", entry.path)
+                vim.notify("Copied: " .. entry.path)
+            end
+        end, { buffer = args.data.buf_id, desc = "Copy path" })
+    end,
+})
+
 autocmd({ "ColorScheme" }, {
     callback = function()
         vim.cmd([[hi Lualine_c_normal guibg=none]])

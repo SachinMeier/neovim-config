@@ -74,6 +74,16 @@ local config = {
                 max_length = vim.o.columns * 2 / 3,
                 show_filename_only = false,
                 mode = 0,
+                fmt = function(name)
+                    local parts = {}
+                    for part in string.gmatch(name, "[^/]+") do
+                        table.insert(parts, part)
+                    end
+                    if #parts <= 3 then
+                        return name
+                    end
+                    return table.concat(parts, "/", #parts - 2)
+                end,
                 right_padding = 5,
                 left_padding = 5,
                 use_mode_colors = true,

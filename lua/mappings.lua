@@ -106,5 +106,28 @@ end, { noremap = true, silent = true })
 --  See `:help hlsearch`
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
+-- LSP keymaps
+map("n", "gd", vim.lsp.buf.definition, { desc = "[G]oto [D]efinition" })
+map("n", "gr", vim.lsp.buf.references, { desc = "[G]oto [R]eferences" })
+map("n", "gD", vim.lsp.buf.declaration, { desc = "[G]oto [D]eclaration" })
+map("n", "gi", vim.lsp.buf.implementation, { desc = "[G]oto [I]mplementation" })
+map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "[R]e[n]ame symbol" })
+map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "[C]ode [A]ction" })
+
+-- Copy file path to clipboard
+map("n", "<leader>cp", function()
+    local path = vim.fn.expand("%:.")
+    path = path:gsub("^minifiles://%d+/", "/")
+    vim.fn.setreg("+", path)
+    vim.notify("Copied: " .. path)
+end, { desc = "[C]opy relative [p]ath" })
+
+map("n", "<leader>cP", function()
+    local path = vim.fn.expand("%:p")
+    path = path:gsub("^minifiles://%d+/", "/")
+    vim.fn.setreg("+", path)
+    vim.notify("Copied: " .. path)
+end, { desc = "[C]opy absolute [P]ath" })
+
 -- Diagnostic keymaps
 map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })

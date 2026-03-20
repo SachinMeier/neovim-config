@@ -114,11 +114,18 @@ local builtin_plugins = {
     {
         "nvim-treesitter/nvim-treesitter",
         version = false, -- last release is way too old and doesn't work on Windows
-        evevent = { "BufReadPost", "BufNewFile", "BufWritePost" },
+        event = { "BufReadPost", "BufNewFile", "BufWritePost" },
         cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
         build = ":TSUpdate",
-        opts = function()
-            require("plugins.configs.treesitter")
+        config = function()
+            local opts = require("plugins.configs.treesitter")
+            require("nvim-treesitter").setup(opts)
+            -- Ensure highlighting is enabled for all buffers
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function()
+                    pcall(vim.treesitter.start)
+                end,
+            })
         end,
     },
     -- Telescope
@@ -135,11 +142,10 @@ local builtin_plugins = {
         },
         cmd = "Telescope",
         config = function(_)
-            require("telescope").setup()
+            require("telescope").setup(require("plugins.configs.telescope"))
             -- To get fzf loaded and working with telescope, you need to call
             -- load_extension, somewhere after setup function:
             require("telescope").load_extension("fzf")
-            require("plugins.configs.telescope")
         end,
     },
     -- Statusline
@@ -152,11 +158,13 @@ local builtin_plugins = {
     },
     -- colorscheme
     {
-        -- Rose-pine - Soho vibes for Neovim
-        "rose-pine/neovim",
-        name = "rose-pine",
+        "Mofiqul/vscode.nvim",
+        name = "vscode",
+        priority = 1000,
         opts = {
-            dark_variant = "main",
+            style = "dark",
+            transparent = false,
+            italic_comments = true,
         },
     },
     -- LSP stuffs
@@ -312,7 +320,7 @@ require("lazy").setup({
         -- install missing plugins on startup
         missing = true,
         -- try to load one of these colorschemes when starting an installation during startup
-        colorscheme = { "rose-pine", "habamax" },
+        colorscheme = { "vscode", "habamax" },
     },
     checker = {
         -- automatically check for plugin updates
