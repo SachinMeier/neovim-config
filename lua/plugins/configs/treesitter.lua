@@ -17,6 +17,13 @@ local custom_installed = exist and type(custom) == "table" and custom.ensure_ins
 local ensure_installed = {
     "go",
     "python",
+    "elixir",
+    "heex",
+    "eex",
+    "erlang",
+    "typescript",
+    "tsx",
+    "javascript",
     "dockerfile",
     "json",
     "yaml",

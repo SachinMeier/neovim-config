@@ -69,6 +69,16 @@ local builtin_plugins = {
                 vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
             end
 
+            local copy_abs_path = function()
+                local entry = require("mini.files").get_fs_entry()
+                if not entry then
+                    vim.notify("No entry under cursor", vim.log.levels.WARN)
+                    return
+                end
+                vim.fn.setreg("+", entry.path)
+                vim.notify("Copied: " .. entry.path)
+            end
+
             vim.api.nvim_create_autocmd("User", {
                 pattern = "MiniFilesBufferCreate",
                 callback = function(args)
@@ -79,6 +89,13 @@ local builtin_plugins = {
                         opts.mappings and opts.mappings.toggle_hidden or "g.",
                         toggle_dotfiles,
                         { buffer = buf_id, desc = "Toggle hidden files" }
+                    )
+
+                    vim.keymap.set(
+                        "n",
+                        "<leader>cP",
+                        copy_abs_path,
+                        { buffer = buf_id, desc = "[C]opy absolute [P]ath of entry under cursor" }
                     )
 
                     map_split(buf_id, opts.mappings and opts.mappings.go_in_horizontal or "<C-w>s", "horizontal", false)

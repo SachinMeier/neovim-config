@@ -18,7 +18,11 @@ local formatting_servers = {
     dockerls = {},
     bashls = {},
     gopls = {},
+    pyright = {},
     ruff_lsp = {},
+    ts_ls = {},
+    elixirls = {},
+    erlangls = {},
     vimls = {},
     yamlls = {},
     lua_ls = {
@@ -121,3 +125,11 @@ require("mason-lspconfig").setup({
     -- Whether installed servers should automatically be enabled via `:h vim.lsp.enable()`.
     automatic_enable = true,
 })
+
+-- erlang_ls: nvim-lspconfig no longer ships a preset for it, so define our own.
+vim.lsp.config("erlangls", {
+    cmd = { "erlang_ls" },
+    filetypes = { "erlang" },
+    root_markers = { "rebar.config", "erlang.mk", ".git" },
+})
+vim.lsp.enable("erlangls")
