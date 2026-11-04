@@ -21,7 +21,6 @@ local formatting_servers = {
     pyright = {},
     ruff_lsp = {},
     ts_ls = {},
-    elixirls = {},
     erlangls = {},
     vimls = {},
     yamlls = {},

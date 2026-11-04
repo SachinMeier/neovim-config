@@ -310,6 +310,21 @@ local builtin_plugins = {
             require("which-key").setup()
         end,
     },
+    -- Elixir: NextLS via elixir-tools.nvim (HEEx function component navigation)
+    {
+        "elixir-tools/elixir-tools.nvim",
+        version = "*",
+        event = { "BufReadPre", "BufNewFile" },
+        ft = { "elixir", "eelixir", "heex", "surface" },
+        config = function()
+            require("elixir").setup({
+                nextls = { enable = true },
+                elixirls = { enable = false },
+                projectionist = { enable = true },
+            })
+        end,
+        dependencies = { "nvim-lua/plenary.nvim" },
+    },
 }
 
 local exist, custom = pcall(require, "custom")
